@@ -1,6 +1,7 @@
-!pip install nemo_toolkit['all']
-!pip install elevenlabs
-!pip install openai
-!pip install openai-whisper
-!pip install faster-whisper
-!pip install ffmpeg-python
+nemo-text-processing==0.2.2rc0
+nemo_toolkit==1.22.0
+elevenlabs==0.2.27
+openai==1.9.0
+openai-whisper==20231117
+faster-whisper==0.10.0
+ffmpeg-python==0.2.0
