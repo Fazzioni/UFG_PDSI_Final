@@ -1,0 +1,55 @@
+<script>
+    var my_div = document.createElement("DIV");
+    var my_btn = document.createElement("BUTTON");
+    var t = document.createTextNode("Press to start recording");
+    
+    my_btn.appendChild(t);
+    my_div.appendChild(my_btn);
+    document.body.appendChild(my_div);
+    
+    var base64data = 0;
+    var reader;
+    var recorder, gumStream;
+    var recordButton = my_btn;
+    
+    var handleSuccess = function(stream) {
+      gumStream = stream;
+      recorder = new MediaRecorder(stream);
+      recorder.ondataavailable = function(e) {
+        reader = new FileReader();
+        reader.readAsDataURL(e.data);
+        reader.onloadend = function() {
+          base64data = reader.result;
+        }
+      };
+      recorder.start();
+      };
+    
+    recordButton.innerText = "Recording... press to stop";
+    
+    navigator.mediaDevices.getUserMedia({audio: true}).then(handleSuccess);
+    
+    function toggleRecording() {
+      if (recorder && recorder.state == "recording") {
+          recorder.stop();
+          gumStream.getAudioTracks()[0].stop();
+          recordButton.innerText = "Saving the recording... pls wait!"
+      }
+    }
+    
+    function sleep(ms) {
+      return new Promise(resolve => setTimeout(resolve, ms));
+    }
+    
+    var data = new Promise(resolve=>{
+    recordButton.onclick = ()=>{
+    toggleRecording()
+    
+    sleep(2000).then(() => {
+      resolve(base64data.toString())
+    });
+    }
+    });
+
+    </script>
+    
